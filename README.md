@@ -1,68 +1,19 @@
-application-nginx Cookbook
-==========================
-TODO: Enter the cookbook description here.
+application-defaults Cookbook
+============
 
-e.g.
-This cookbook makes your favorite breakfast sandwich.
-
-Requirements
-------------
-TODO: List your cookbook requirements. Be sure to include any requirements this cookbook has on platforms, libraries, other cookbooks, packages, operating systems, etc.
-
-e.g.
-#### packages
-- `toaster` - application-nginx needs toaster to brown your bagel.
+This cookbook helps you setup the nginx config to run a rails application with unicorn or puma
+- It depends on:
+  + [application-defaults](https://github.com/phanviet/chef-application-defaults.git)
+  + [nginx](https://supermarket.chef.io/cookbooks/nginx)
+- Some related cookbooks:
+  + [application-unicorn](https://github.com/phanviet/chef-application-unicorn.git)
+  + [application-puma](https://github.com/phanviet/chef-application-puma.git)
 
 Attributes
 ----------
-TODO: List your cookbook attributes here.
+  + Reading `attributes` folder in cookbook to know more details
 
-e.g.
-#### application-nginx::default
-<table>
-  <tr>
-    <th>Key</th>
-    <th>Type</th>
-    <th>Description</th>
-    <th>Default</th>
-  </tr>
-  <tr>
-    <td><tt>['application-nginx']['bacon']</tt></td>
-    <td>Boolean</td>
-    <td>whether to include bacon</td>
-    <td><tt>true</tt></td>
-  </tr>
-</table>
-
-Usage
+Recipes & Usage
 -----
-#### application-nginx::default
-TODO: Write usage instructions for each cookbook.
-
-e.g.
-Just include `application-nginx` in your node's `run_list`:
-
-```json
-{
-  "name":"my_node",
-  "run_list": [
-    "recipe[application-nginx]"
-  ]
-}
-```
-
-Contributing
-------------
-TODO: (optional) If this is a public cookbook, detail the process for contributing. If this is a private cookbook, remove this section.
-
-e.g.
-1. Fork the repository on Github
-2. Create a named feature branch (like `add_component_x`)
-3. Write your change
-4. Write tests for your change (if applicable)
-5. Run the tests, ensuring they all pass
-6. Submit a Pull Request using Github
-
-License and Authors
--------------------
-Authors: TODO: List authors
+- `recipe[application-nginx]`: Setup nginx config and services to run a rails application with unicorn or puma
+- `recipe[application-nginx::service]`: Setup only services for nginx
