@@ -1,4 +1,4 @@
-application-defaults Cookbook
+application-nginx Cookbook
 ============
 
 This cookbook helps you setup the nginx config to run a rails application with unicorn or puma
