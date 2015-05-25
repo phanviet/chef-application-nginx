@@ -1,0 +1,44 @@
+<%
+nginx = node[:app][:nginx]
+address_is_ip = !nginx[:server_name].match(/\A\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\z/).nil?
+server = nil
+if node[:app][:unicorn]
+  server = node[:app][:unicorn]
+elsif node[:app][:puma]
+  server = node[:app][:puma]
+end
+%>
+
+upstream <%= node[:app][:name] %>_app_server {
+  <% if server %>
+    server unix:<%= server[:socket] %> fail_timeout=0;
+  <% end %>
+}
+
+server {
+  listen 80<%= ' default' if address_is_ip %>;
+  server_name <%= nginx[:server_name] %>;
+  ## redirect http to https ##
+  #rewrite ^ https://$server_name$request_uri? permanent;
+
+  root <%= node[:app][:deploy_to] %>/<%= node[:app][:current_path] %>/public;
+
+  gzip on;
+  gzip_types text/plain text/xml application/xml application/xml+rss
+             text/css text/javascript application/javascript application/json;
+
+  try_files $uri @rails;
+
+  location @rails {
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Host $http_host;
+    proxy_redirect off;
+    proxy_pass http://<%= node[:app][:name] %>_app_server;
+  }
+
+  error_page 500 502 503 504 /500.html;
+  error_page 403 /403.html;
+  error_page 404 /404.html;
+
+  client_max_body_size 50M;
+}
